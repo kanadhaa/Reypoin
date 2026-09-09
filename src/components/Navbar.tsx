@@ -120,20 +120,22 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="hidden sm:inline">Pedoman Poin</span>
             </button>
 
-            {/* Notifications Bell */}
-            <button
-              id="navbar-btn-notifications"
-              onClick={onOpenNotifications}
-              className="relative p-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
-              title="Notifikasi Real-time"
-            >
-              <Bell className="w-5 h-5" />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 bg-rose-500 text-white font-extrabold text-[10px] rounded-full flex items-center justify-center animate-bounce shadow-xs">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
+            {/* Notifications Bell (Only when logged in) */}
+            {currentUser && (
+              <button
+                id="navbar-btn-notifications"
+                onClick={onOpenNotifications}
+                className="relative p-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+                title="Notifikasi Real-time"
+              >
+                <Bell className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 bg-rose-500 text-white font-extrabold text-[10px] rounded-full flex items-center justify-center animate-bounce shadow-xs">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+            )}
 
             {/* User Account & Logout */}
             {currentUser ? (

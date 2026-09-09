@@ -9,13 +9,8 @@ import {
   X, 
   LogIn, 
   UserPlus, 
-  CheckCircle2, 
-  ArrowRight,
-  Sparkles,
   Eye,
-  EyeOff,
-  Copy,
-  Check
+  EyeOff
 } from 'lucide-react';
 
 interface AuthModalProps {
@@ -31,7 +26,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   users,
   currentUser,
 }) => {
-  const [mode, setMode] = useState<'login' | 'register' | 'switch'>('login');
+  const [mode, setMode] = useState<'login' | 'register'>('login');
   
   // Login form state
   const [usernameOrNis, setUsernameOrNis] = useState('');
@@ -86,19 +81,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     // Authenticate successfully
     setCurrentUser(targetUser);
     onClose();
-  };
-
-  const handleSelectAccountForLogin = (user: User) => {
-    setUsernameOrNis(user.username);
-    setPassword('');
-    setLoginError('');
-    setMode('login');
-  };
-
-  const handleFillCredentials = (uName: string, pass: string) => {
-    setUsernameOrNis(uName);
-    setPassword(pass);
-    setLoginError('');
   };
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
@@ -190,36 +172,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
         )}
 
-        {/* Tabs: Login / Register / Quick Switch */}
+        {/* Tabs: Login / Register */}
         <div className="flex border-b border-slate-200 mt-4 text-xs font-semibold">
           <button
             id="tab-auth-login"
             onClick={() => setMode('login')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors ${
+            className={`pb-2.5 px-4 border-b-2 transition-colors ${
               mode === 'login'
-                ? 'border-indigo-600 text-indigo-600'
+                ? 'border-indigo-600 text-indigo-600 font-bold'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             Masuk Akun
           </button>
           <button
-            id="tab-auth-quick"
-            onClick={() => setMode('switch')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors ${
-              mode === 'switch'
-                ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Direktori Akun Pengurus
-          </button>
-          <button
             id="tab-auth-register"
             onClick={() => setMode('register')}
-            className={`pb-2.5 px-3 border-b-2 transition-colors ${
+            className={`pb-2.5 px-4 border-b-2 transition-colors ${
               mode === 'register'
-                ? 'border-indigo-600 text-indigo-600'
+                ? 'border-indigo-600 text-indigo-600 font-bold'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -230,83 +201,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* 1. Login Mode */}
         {mode === 'login' && (
           <div className="py-4 space-y-4">
-            {/* Dedicated Primary Accounts Showcase */}
-            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/90 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                  Kredensial Akun Resmi:
-                </span>
-                <span className="text-[10px] text-slate-400">Pilih akun untuk masuk instan</span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {/* 1. Akun Admin Card */}
-                <div className="p-3 rounded-xl bg-white border border-purple-200 shadow-2xs hover:border-purple-300 transition-all flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between gap-1 mb-1">
-                      <span className="font-extrabold text-xs text-purple-950 flex items-center gap-1.5">
-                        <Shield className="w-3.5 h-3.5 text-purple-600" />
-                        Administrator Resmi
-                      </span>
-                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 uppercase">
-                        Hak Admin
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-600 mb-1.5">
-                      Pencatatan poin, kelola kedisiplinan & ekspor laporan resmi.
-                    </p>
-                    <div className="bg-purple-50/60 p-1.5 rounded-lg text-[11px] font-mono text-purple-900 mb-2 border border-purple-100 space-y-0.5">
-                      <div>User: <strong className="select-all">admin</strong></div>
-                      <div>Sandi: <strong className="select-all">admin123</strong></div>
-                    </div>
-                  </div>
-                  <div className="pt-1">
-                    <button
-                      type="button"
-                      id="btn-fill-admin-creds"
-                      onClick={() => handleFillCredentials('admin', 'admin123')}
-                      className="w-full py-1.5 text-center text-xs font-bold bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors cursor-pointer shadow-2xs"
-                    >
-                      Gunakan Akun Admin
-                    </button>
-                  </div>
-                </div>
-
-                {/* 2. Akun Pengurus Biasa Card */}
-                <div className="p-3 rounded-xl bg-white border border-blue-200 shadow-2xs hover:border-blue-300 transition-all flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between gap-1 mb-1">
-                      <span className="font-extrabold text-xs text-blue-950 flex items-center gap-1.5">
-                        <UserIcon className="w-3.5 h-3.5 text-blue-600" />
-                        Pengurus Biasa Resmi
-                      </span>
-                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 uppercase">
-                        Siswa / Anggota
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-600 mb-1.5">
-                      Melihat 100 poin pribadi, riwayat kedisiplinan & prestasi.
-                    </p>
-                    <div className="bg-blue-50/60 p-1.5 rounded-lg text-[11px] font-mono text-blue-900 mb-2 border border-blue-100 space-y-0.5">
-                      <div>User: <strong className="select-all">pengurus</strong></div>
-                      <div>Sandi: <strong className="select-all">pengurus123</strong></div>
-                    </div>
-                  </div>
-                  <div className="pt-1">
-                    <button
-                      type="button"
-                      id="btn-fill-pengurus-creds"
-                      onClick={() => handleFillCredentials('pengurus', 'pengurus123')}
-                      className="w-full py-1.5 text-center text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors cursor-pointer shadow-2xs"
-                    >
-                      Gunakan Akun Pengurus
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {/* Login Form */}
             <form onSubmit={handleLoginSubmit} className="space-y-3.5 text-sm pt-1">
               <div>
@@ -319,10 +213,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     id="input-login-username"
                     type="text"
                     required
-                    placeholder="Contoh: admin atau pengurus"
+                    placeholder="Masukkan NIS atau Username terdaftar"
                     value={usernameOrNis}
                     onChange={e => setUsernameOrNis(e.target.value)}
                     className="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    autoComplete="username"
                   />
                 </div>
               </div>
@@ -336,15 +231,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <input
                     id="input-login-password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Masukkan sandi akun Anda (contoh: admin123 atau pengurus123)"
+                    required
+                    placeholder="Masukkan kata sandi akun Anda"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     className="w-full pl-9 pr-10 py-2 text-sm bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    autoComplete="current-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(p => !p)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                    title={showPassword ? 'Sembunyikan sandi' : 'Lihat sandi'}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -366,105 +264,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <span>Verifikasi & Masuk ke Sistem</span>
               </button>
             </form>
-          </div>
-        )}
-
-        {/* 2. Quick Switch Mode */}
-        {mode === 'switch' && (
-          <div className="py-4 space-y-3 max-h-[60vh] overflow-y-auto">
-            <p className="text-xs text-slate-500 mb-2">
-              Pilih salah satu profil di bawah untuk mengisi formulir login dan memverifikasi kata sandi:
-            </p>
-
-            {/* Admin Section */}
-            <div>
-              <span className="text-[11px] font-bold text-purple-700 uppercase tracking-wider block mb-1.5">
-                Akun Hak Akses Admin (Pencatat Poin & BPH)
-              </span>
-              <div className="space-y-1.5">
-                {users
-                  .filter(u => u.role === 'admin')
-                  .sort((a, b) => (a.username === 'admin' ? -1 : b.username === 'admin' ? 1 : 0))
-                  .map(u => (
-                    <div
-                      key={u.id}
-                      onClick={() => handleSelectAccountForLogin(u)}
-                      className={`p-2.5 rounded-xl border transition-all flex items-center justify-between cursor-pointer group ${
-                        u.username === 'admin'
-                          ? 'border-purple-300 bg-purple-50/50 hover:bg-purple-100/60 shadow-2xs'
-                          : 'border-slate-200 hover:border-purple-300 hover:bg-purple-50/40'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-purple-600 text-white font-bold flex items-center justify-center text-xs">
-                          {u.name.charAt(0)}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-1.5">
-                            <p className="text-xs font-bold text-slate-900 group-hover:text-purple-700">
-                              {u.name}
-                            </p>
-                            {u.username === 'admin' && (
-                              <span className="text-[9px] font-bold px-1.5 py-0.2 bg-purple-200 text-purple-900 rounded font-mono">
-                                user: admin
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-[11px] text-slate-500">{u.position} • {u.division}</p>
-                        </div>
-                      </div>
-                      <span className="text-xs text-purple-700 font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
-                        Pilih <ArrowRight className="w-3 h-3" />
-                      </span>
-                    </div>
-                  ))}
-              </div>
-            </div>
-
-            {/* Pengurus Biasa Section */}
-            <div className="pt-2">
-              <span className="text-[11px] font-bold text-blue-700 uppercase tracking-wider block mb-1.5">
-                Akun Hak Akses Pengurus Biasa (Lihat Poin Pribadi)
-              </span>
-              <div className="space-y-1.5">
-                {users
-                  .filter(u => u.role === 'pengurus')
-                  .sort((a, b) => (a.username === 'pengurus' ? -1 : b.username === 'pengurus' ? 1 : 0))
-                  .map(u => (
-                    <div
-                      key={u.id}
-                      onClick={() => handleSelectAccountForLogin(u)}
-                      className={`p-2.5 rounded-xl border transition-all flex items-center justify-between cursor-pointer group ${
-                        u.username === 'pengurus'
-                          ? 'border-blue-300 bg-blue-50/50 hover:bg-blue-100/60 shadow-2xs'
-                          : 'border-slate-200 hover:border-blue-300 hover:bg-blue-50/40'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-xs">
-                          {u.name.charAt(0)}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-1.5">
-                            <p className="text-xs font-bold text-slate-900 group-hover:text-blue-700">
-                              {u.name}
-                            </p>
-                            {u.username === 'pengurus' && (
-                              <span className="text-[9px] font-bold px-1.5 py-0.2 bg-blue-200 text-blue-900 rounded font-mono">
-                                user: pengurus
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-[11px] text-slate-500">{u.division} • Poin: {u.currentPoints}</p>
-                        </div>
-                      </div>
-                      <span className="text-xs text-blue-700 font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
-                        Pilih <ArrowRight className="w-3 h-3" />
-                      </span>
-                    </div>
-                  ))}
-              </div>
-            </div>
           </div>
         )}
 

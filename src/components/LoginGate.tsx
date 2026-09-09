@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, User as UserIcon, Eye, EyeOff, LogIn, AlertCircle, Sparkles, UserPlus, KeyRound } from 'lucide-react';
+import { ShieldCheck, Lock, User as UserIcon, Eye, EyeOff, LogIn, AlertCircle, UserPlus, KeyRound } from 'lucide-react';
 import { User } from '../types';
 
 interface LoginGateProps {
@@ -60,14 +60,8 @@ export const LoginGate: React.FC<LoginGateProps> = ({
     }, 250);
   };
 
-  const handleFillCredentials = (uName: string, pass: string) => {
-    setUsernameOrNis(uName);
-    setPassword(pass);
-    setErrorMsg('');
-  };
-
   return (
-    <div className="max-w-xl mx-auto my-6 sm:my-10 px-4">
+    <div className="max-w-md mx-auto my-6 sm:my-12 px-4">
       {/* Verification Shield Card */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xl relative overflow-hidden">
         {/* Subtle Decorative Top Accent */}
@@ -83,78 +77,11 @@ export const LoginGate: React.FC<LoginGateProps> = ({
             <span>Verifikasi Keamanan Wajib</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            Portal Verifikasi Masuk
+            Portal Masuk Resmi
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-md mx-auto leading-relaxed">
-            Sistem Informasi Manajemen Poin Kedisiplinan & Prestasi Pengurus OSIS-MPK SMA Negeri 6 Bandung (Masa Bakti 2026/2027)
+          <p className="text-xs sm:text-sm text-slate-500 mt-1.5 max-w-sm mx-auto leading-relaxed">
+            Sistem Informasi Manajemen Poin Kedisiplinan & Prestasi Pengurus OSIS-MPK SMA Negeri 6 Bandung
           </p>
-        </div>
-
-        {/* Credential Reference Helpers (Prefill Form for Security Testing) */}
-        <div className="mb-6 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              Kredensial Akun Resmi Tersedia:
-            </span>
-            <span className="text-[10px] text-slate-500 font-medium">Klik untuk isi formulir</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            {/* Admin Box */}
-            <div className="p-2.5 rounded-xl bg-white border border-purple-200 shadow-2xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1 mb-1">
-                  <span className="font-bold text-xs text-purple-950 flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-purple-600" />
-                    Administrator
-                  </span>
-                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 uppercase">
-                    Admin
-                  </span>
-                </div>
-                <div className="bg-purple-50/70 p-1.5 rounded-lg text-[11px] font-mono text-purple-900 mb-2 border border-purple-100">
-                  <div>User: <strong>admin</strong></div>
-                  <div>Sandi: <strong>admin123</strong></div>
-                </div>
-              </div>
-              <button
-                type="button"
-                id="btn-prefill-admin"
-                onClick={() => handleFillCredentials('admin', 'admin123')}
-                className="w-full py-1.5 text-xs font-bold text-purple-700 bg-purple-100 hover:bg-purple-200 rounded-lg transition-colors cursor-pointer"
-              >
-                Isi Kredensial Admin
-              </button>
-            </div>
-
-            {/* Pengurus Box */}
-            <div className="p-2.5 rounded-xl bg-white border border-blue-200 shadow-2xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-1 mb-1">
-                  <span className="font-bold text-xs text-blue-950 flex items-center gap-1">
-                    <UserIcon className="w-3.5 h-3.5 text-blue-600" />
-                    Pengurus Biasa
-                  </span>
-                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 uppercase">
-                    Siswa
-                  </span>
-                </div>
-                <div className="bg-blue-50/70 p-1.5 rounded-lg text-[11px] font-mono text-blue-900 mb-2 border border-blue-100">
-                  <div>User: <strong>pengurus</strong></div>
-                  <div>Sandi: <strong>pengurus123</strong></div>
-                </div>
-              </div>
-              <button
-                type="button"
-                id="btn-prefill-pengurus"
-                onClick={() => handleFillCredentials('pengurus', 'pengurus123')}
-                className="w-full py-1.5 text-xs font-bold text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors cursor-pointer"
-              >
-                Isi Kredensial Pengurus
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Verification Login Form */}
@@ -168,11 +95,12 @@ export const LoginGate: React.FC<LoginGateProps> = ({
               <input
                 id="login-gate-input-username"
                 type="text"
-                placeholder="Contoh: admin, pengurus, atau NIS 242510001"
+                placeholder="Masukkan NIS atau Username terdaftar"
                 value={usernameOrNis}
                 onChange={e => setUsernameOrNis(e.target.value)}
                 className="w-full pl-9 pr-3 py-2.5 text-sm bg-white border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                 required
+                autoComplete="username"
               />
             </div>
           </div>
@@ -186,11 +114,12 @@ export const LoginGate: React.FC<LoginGateProps> = ({
               <input
                 id="login-gate-input-password"
                 type={showPassword ? 'text' : 'password'}
-                placeholder="Masukkan kata sandi (contoh: admin123 atau pengurus123)"
+                placeholder="Masukkan kata sandi akun Anda"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 className="w-full pl-9 pr-10 py-2.5 text-sm bg-white border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                 required
+                autoComplete="current-password"
               />
               <button
                 type="button"
