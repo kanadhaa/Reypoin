@@ -1,0 +1,248 @@
+import React, { useState } from 'react';
+import { ShieldCheck, Lock, User as UserIcon, Eye, EyeOff, LogIn, AlertCircle, Sparkles, UserPlus, KeyRound } from 'lucide-react';
+import { User } from '../types';
+
+interface LoginGateProps {
+  users: User[];
+  onLoginSuccess: (user: User) => void;
+  onOpenRegister: () => void;
+}
+
+export const LoginGate: React.FC<LoginGateProps> = ({
+  users,
+  onLoginSuccess,
+  onOpenRegister,
+}) => {
+  const [usernameOrNis, setUsernameOrNis] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg('');
+
+    if (!usernameOrNis.trim()) {
+      setErrorMsg('NIS atau Username wajib diisi untuk verifikasi identitas.');
+      return;
+    }
+
+    if (!password || password.trim() === '') {
+      setErrorMsg('Kata sandi wajib diisi. Masukkan kata sandi akun Anda.');
+      return;
+    }
+
+    setIsLoading(true);
+
+    setTimeout(() => {
+      const targetUser = users.find(
+        u => u.username.toLowerCase() === usernameOrNis.trim().toLowerCase() ||
+             u.nis === usernameOrNis.trim() ||
+             u.email.toLowerCase() === usernameOrNis.trim().toLowerCase()
+      );
+
+      if (!targetUser) {
+        setIsLoading(false);
+        setErrorMsg('Akun tidak ditemukan. Periksa kembali NIS atau Username yang Anda masukkan.');
+        return;
+      }
+
+      const expectedPassword = targetUser.password || (targetUser.role === 'admin' ? 'admin123' : 'pengurus123');
+      if (password !== expectedPassword) {
+        setIsLoading(false);
+        setErrorMsg('Kata sandi salah! Verifikasi identitas akun gagal.');
+        return;
+      }
+
+      setIsLoading(false);
+      onLoginSuccess(targetUser);
+    }, 250);
+  };
+
+  const handleFillCredentials = (uName: string, pass: string) => {
+    setUsernameOrNis(uName);
+    setPassword(pass);
+    setErrorMsg('');
+  };
+
+  return (
+    <div className="max-w-xl mx-auto my-6 sm:my-10 px-4">
+      {/* Verification Shield Card */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xl relative overflow-hidden">
+        {/* Subtle Decorative Top Accent */}
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-600"></div>
+
+        {/* Header Branding */}
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center mx-auto mb-3.5 border border-indigo-100 shadow-2xs">
+            <Lock className="w-8 h-8" />
+          </div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-2 border border-slate-200/80">
+            <KeyRound className="w-3.5 h-3.5 text-indigo-600" />
+            <span>Verifikasi Keamanan Wajib</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            Portal Verifikasi Masuk
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-md mx-auto leading-relaxed">
+            Sistem Informasi Manajemen Poin Kedisiplinan & Prestasi Pengurus OSIS-MPK SMA Negeri 6 Bandung (Masa Bakti 2026/2027)
+          </p>
+        </div>
+
+        {/* Credential Reference Helpers (Prefill Form for Security Testing) */}
+        <div className="mb-6 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              Kredensial Akun Resmi Tersedia:
+            </span>
+            <span className="text-[10px] text-slate-500 font-medium">Klik untuk isi formulir</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {/* Admin Box */}
+            <div className="p-2.5 rounded-xl bg-white border border-purple-200 shadow-2xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between gap-1 mb-1">
+                  <span className="font-bold text-xs text-purple-950 flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-purple-600" />
+                    Administrator
+                  </span>
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 uppercase">
+                    Admin
+                  </span>
+                </div>
+                <div className="bg-purple-50/70 p-1.5 rounded-lg text-[11px] font-mono text-purple-900 mb-2 border border-purple-100">
+                  <div>User: <strong>admin</strong></div>
+                  <div>Sandi: <strong>admin123</strong></div>
+                </div>
+              </div>
+              <button
+                type="button"
+                id="btn-prefill-admin"
+                onClick={() => handleFillCredentials('admin', 'admin123')}
+                className="w-full py-1.5 text-xs font-bold text-purple-700 bg-purple-100 hover:bg-purple-200 rounded-lg transition-colors cursor-pointer"
+              >
+                Isi Kredensial Admin
+              </button>
+            </div>
+
+            {/* Pengurus Box */}
+            <div className="p-2.5 rounded-xl bg-white border border-blue-200 shadow-2xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between gap-1 mb-1">
+                  <span className="font-bold text-xs text-blue-950 flex items-center gap-1">
+                    <UserIcon className="w-3.5 h-3.5 text-blue-600" />
+                    Pengurus Biasa
+                  </span>
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 uppercase">
+                    Siswa
+                  </span>
+                </div>
+                <div className="bg-blue-50/70 p-1.5 rounded-lg text-[11px] font-mono text-blue-900 mb-2 border border-blue-100">
+                  <div>User: <strong>pengurus</strong></div>
+                  <div>Sandi: <strong>pengurus123</strong></div>
+                </div>
+              </div>
+              <button
+                type="button"
+                id="btn-prefill-pengurus"
+                onClick={() => handleFillCredentials('pengurus', 'pengurus123')}
+                className="w-full py-1.5 text-xs font-bold text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors cursor-pointer"
+              >
+                Isi Kredensial Pengurus
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Verification Login Form */}
+        <form onSubmit={handleFormSubmit} className="space-y-4">
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              NIS atau Username Pengurus
+            </label>
+            <div className="relative">
+              <UserIcon className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                id="login-gate-input-username"
+                type="text"
+                placeholder="Contoh: admin, pengurus, atau NIS 242510001"
+                value={usernameOrNis}
+                onChange={e => setUsernameOrNis(e.target.value)}
+                className="w-full pl-9 pr-3 py-2.5 text-sm bg-white border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              Kata Sandi Akun
+            </label>
+            <div className="relative">
+              <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                id="login-gate-input-password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Masukkan kata sandi (contoh: admin123 atau pengurus123)"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="w-full pl-9 pr-10 py-2.5 text-sm bg-white border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                required
+              />
+              <button
+                type="button"
+                id="login-gate-toggle-password"
+                onClick={() => setShowPassword(p => !p)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                title={showPassword ? 'Sembunyikan sandi' : 'Lihat sandi'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          {errorMsg && (
+            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2 animate-in fade-in">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 mt-0.5" />
+              <span>{errorMsg}</span>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            id="login-gate-btn-submit"
+            disabled={isLoading}
+            className="w-full py-3 text-sm font-bold bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-70 text-white rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+          >
+            {isLoading ? (
+              <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            ) : (
+              <LogIn className="w-4 h-4" />
+            )}
+            <span>Verifikasi & Masuk ke Sistem</span>
+          </button>
+        </form>
+
+        {/* Footer info & Register link */}
+        <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+          <div className="flex items-center gap-1.5 text-slate-600 font-medium">
+            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <span>Data terlindungi & terenkripsi sesi</span>
+          </div>
+          <button
+            type="button"
+            id="login-gate-btn-register"
+            onClick={onOpenRegister}
+            className="font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 transition-colors cursor-pointer"
+          >
+            <UserPlus className="w-3.5 h-3.5" />
+            <span>Daftarkan Pengurus Baru</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -1,0 +1,6 @@
+{
+  "name": "Poin OSIS-MPK 06 Bandung",
+  "description": "Sistem Informasi Manajemen Poin Kedisiplinan & Prestasi Pengurus OSIS-MPK SMA Negeri 6 Bandung resmi dengan sinkronisasi Cloud Firestore, otentikasi peran administrator & pengurus, riwayat transparansi, dan ekspor dokumen PDF/Excel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
