@@ -16,7 +16,8 @@ import {
   BookOpen,
   Info,
   Calendar,
-  CheckCircle2
+  CheckCircle2,
+  KeyRound
 } from 'lucide-react';
 
 interface MemberDashboardProps {
@@ -25,6 +26,7 @@ interface MemberDashboardProps {
   notifications: NotificationItem[];
   onOpenNotifications: () => void;
   onOpenRules: () => void;
+  onOpenChangeCredentials?: (user: User) => void;
 }
 
 export const MemberDashboard: React.FC<MemberDashboardProps> = ({
@@ -33,6 +35,7 @@ export const MemberDashboard: React.FC<MemberDashboardProps> = ({
   notifications,
   onOpenNotifications,
   onOpenRules,
+  onOpenChangeCredentials,
 }) => {
   // STRICT PRIVACY GUARANTEE: Filter strictly for currentUser.id
   const myTransactions = transactions.filter(t => t.userId === currentUser.id);
@@ -95,6 +98,17 @@ export const MemberDashboard: React.FC<MemberDashboardProps> = ({
               <FileSpreadsheet className="w-4 h-4 text-emerald-300" />
               <span>Unduh Excel</span>
             </button>
+
+            {onOpenChangeCredentials && (
+              <button
+                id="btn-member-change-credentials"
+                onClick={() => onOpenChangeCredentials(currentUser)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-indigo-600/90 hover:bg-indigo-600 rounded-xl backdrop-blur-xs border border-indigo-400/40 transition-all cursor-pointer shadow-xs"
+              >
+                <KeyRound className="w-4 h-4 text-indigo-200" />
+                <span>Ubah Username / Sandi</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

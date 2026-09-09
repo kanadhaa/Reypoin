@@ -19,6 +19,7 @@ import { AdminRecordModal } from './components/AdminRecordModal';
 import { MemberDetailModal } from './components/MemberDetailModal';
 import { RulesDirectoryModal } from './components/RulesDirectoryModal';
 import { AdminCreateUserModal } from './components/AdminCreateUserModal';
+import { ChangeCredentialsModal } from './components/ChangeCredentialsModal';
 import { LoginGate } from './components/LoginGate';
 import { ShieldCheck, Sparkles, UserCheck, AlertCircle } from 'lucide-react';
 
@@ -38,6 +39,7 @@ export default function App() {
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false);
   const [selectedMemberForDetail, setSelectedMemberForDetail] = useState<User | null>(null);
+  const [credentialsTargetUser, setCredentialsTargetUser] = useState<User | null>(null);
   const [preselectedUserForRecord, setPreselectedUserForRecord] = useState<string | undefined>(undefined);
 
   // Load and synchronize state from storage
@@ -110,6 +112,7 @@ export default function App() {
         }}
         onExportMasterPDF={() => exportAdminMasterPDF(users, transactions)}
         onExportMasterExcel={() => exportAdminMasterExcel(users, transactions)}
+        onOpenChangeCredentials={(target) => setCredentialsTargetUser(target)}
       />
 
       {/* Main Container */}
@@ -132,6 +135,7 @@ export default function App() {
             }}
             onSelectMember={member => setSelectedMemberForDetail(member)}
             onOpenCreateUser={() => setIsCreateUserModalOpen(true)}
+            onOpenChangeCredentials={(target) => setCredentialsTargetUser(target)}
           />
         ) : (
           // REGULAR MEMBER DASHBOARD (Strictly only views their own data!)
@@ -141,6 +145,7 @@ export default function App() {
             notifications={notifications}
             onOpenNotifications={() => setIsNotifModalOpen(true)}
             onOpenRules={() => setIsRulesModalOpen(true)}
+            onOpenChangeCredentials={(target) => setCredentialsTargetUser(target)}
           />
         )}
       </main>
@@ -257,6 +262,29 @@ export default function App() {
         onOpenRecordForUser={
           currentUser?.role === 'admin' ? handleOpenRecordForUser : undefined
         }
+        onOpenChangeCredentials={
+          currentUser?.role === 'admin'
+            ? (target) => setCredentialsTargetUser(target)
+            : undefined
+        }
+      />
+
+      <ChangeCredentialsModal
+        isOpen={Boolean(credentialsTargetUser)}
+        onClose={() => setCredentialsTargetUser(null)}
+        targetUser={credentialsTargetUser}
+        currentUser={currentUser}
+        allUsers={users}
+        onSuccess={(updatedUser) => {
+          syncData();
+          if (currentUser && currentUser.id === updatedUser.id) {
+            setCurrentUserState(updatedUser);
+            setCurrentUser(updatedUser);
+          }
+          if (selectedMemberForDetail && selectedMemberForDetail.id === updatedUser.id) {
+            setSelectedMemberForDetail(updatedUser);
+          }
+        }}
       />
     </div>
   );

@@ -19,7 +19,8 @@ import {
   TrendingUp,
   Layers,
   GraduationCap,
-  UserPlus
+  UserPlus,
+  KeyRound
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -29,6 +30,7 @@ interface AdminDashboardProps {
   onOpenRecordModal: () => void;
   onSelectMember: (user: User) => void;
   onOpenCreateUser?: () => void;
+  onOpenChangeCredentials?: (user: User) => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -38,6 +40,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onOpenRecordModal,
   onSelectMember,
   onOpenCreateUser,
+  onOpenChangeCredentials,
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'history'>('overview');
   const [searchMember, setSearchMember] = useState('');
@@ -158,6 +161,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <FileDown className="w-4 h-4 text-rose-300" />
               <span>Laporan PDF</span>
             </button>
+
+            {onOpenChangeCredentials && (
+              <button
+                id="btn-admin-change-credentials-hero"
+                onClick={() => onOpenChangeCredentials(currentUser)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 text-xs font-bold text-white bg-white/10 hover:bg-white/20 rounded-xl backdrop-blur-xs border border-white/20 transition-all cursor-pointer"
+                title="Ubah Username atau Kata Sandi Akun Admin Anda"
+              >
+                <KeyRound className="w-4 h-4 text-indigo-200" />
+                <span>Ubah Sandi Saya</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -498,23 +513,38 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
                   </div>
 
-                  {/* Points & Badge */}
-                  <div className="flex items-center gap-3 shrink-0">
-                    <div className="text-right">
-                      <div className="flex items-baseline justify-end gap-1">
-                        <span className={`text-lg font-black ${status.color}`}>
-                          {member.currentPoints}
+                    {/* Points & Badge */}
+                    <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                      {onOpenChangeCredentials && (
+                        <button
+                          type="button"
+                          id={`btn-admin-change-member-creds-${member.id}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenChangeCredentials(member);
+                          }}
+                          title={`Ubah Username & Kata Sandi untuk ${member.name}`}
+                          className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <KeyRound className="w-4 h-4" />
+                        </button>
+                      )}
+
+                      <div className="text-right">
+                        <div className="flex items-baseline justify-end gap-1">
+                          <span className={`text-lg font-black ${status.color}`}>
+                            {member.currentPoints}
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-semibold">Poin</span>
+                        </div>
+                        <span
+                          className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-md ${status.bg} ${status.color} border ${status.border}`}
+                        >
+                          {status.label}
                         </span>
-                        <span className="text-[10px] text-slate-400 font-semibold">Poin</span>
                       </div>
-                      <span
-                        className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-md ${status.bg} ${status.color} border ${status.border}`}
-                      >
-                        {status.label}
-                      </span>
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
-                  </div>
                 </div>
               );
             })}

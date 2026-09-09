@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#312e81" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded rect -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Outer Emblem Ring -->
+  <circle cx="256" cy="240" r="170" fill="none" stroke="url(#goldGrad)" stroke-width="12" stroke-dasharray="8 6" opacity="0.85" />
+  <circle cx="256" cy="240" r="150" fill="#1e1b4b" stroke="#6366f1" stroke-width="4" />
+
+  <!-- Shield Shape -->
+  <path d="M256 120 L340 165 V255 C340 310 295 355 256 370 C217 355 172 310 172 255 V165 Z" 
+        fill="url(#goldGrad)" />
+  <path d="M256 138 L324 175 V250 C324 295 288 335 256 348 C224 335 188 295 188 250 V175 Z" 
+        fill="#312e81" />
+
+  <!-- Star in Center -->
+  <polygon points="256,175 268,212 308,212 276,236 288,272 256,248 224,272 236,236 204,212 244,212" fill="#fbbf24" />
+
+  <!-- SMAN 6 Ribbon / Text -->
+  <rect x="96" y="395" width="320" height="54" rx="27" fill="#ffffff" />
+  <text x="256" y="432" font-family="Arial, sans-serif" font-weight="900" font-size="24" fill="#312e81" text-anchor="middle" letter-spacing="3">OSIS-MPK 06</text>
+</svg>

@@ -10,7 +10,8 @@ import {
   FileDown,
   UserCheck,
   Shield,
-  ArrowRightLeft
+  ArrowRightLeft,
+  KeyRound
 } from 'lucide-react';
 import { setCurrentUser } from '../lib/storage';
 
@@ -25,6 +26,7 @@ interface NavbarProps {
   onOpenRecordModal?: () => void;
   onExportMasterPDF?: () => void;
   onExportMasterExcel?: () => void;
+  onOpenChangeCredentials?: (user: User) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -38,6 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenRecordModal,
   onExportMasterPDF,
   onExportMasterExcel,
+  onOpenChangeCredentials,
 }) => {
   const unreadCount = currentUser 
     ? notifications.filter(n => n.userId === currentUser.id && !n.isRead).length
@@ -139,12 +142,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* User Account & Logout */}
             {currentUser ? (
-              <div className="flex items-center gap-2 pl-1 border-l border-slate-200">
+              <div className="flex items-center gap-1.5 sm:gap-2 pl-1 border-l border-slate-200">
                 <button
                   id="navbar-btn-auth-profile"
-                  onClick={onOpenAuthModal}
-                  className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1.5 rounded-xl hover:bg-slate-100 transition-colors text-left cursor-pointer group"
-                  title="Profil & Ganti Akun"
+                  onClick={() => {
+                    if (onOpenChangeCredentials) {
+                      onOpenChangeCredentials(currentUser);
+                    } else {
+                      onOpenAuthModal();
+                    }
+                  }}
+                  className="flex items-center gap-2 p-1 sm:px-2 sm:py-1 rounded-xl hover:bg-slate-100 transition-colors text-left cursor-pointer group"
+                  title="Profil & Ubah Kredensial / Sandi"
                 >
                   <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
                     {currentUser.name.charAt(0)}
@@ -169,6 +178,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </p>
                   </div>
                 </button>
+
+                {onOpenChangeCredentials && (
+                  <button
+                    id="navbar-btn-change-credentials"
+                    onClick={() => onOpenChangeCredentials(currentUser)}
+                    className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 rounded-xl transition-colors cursor-pointer hidden md:flex items-center gap-1 text-xs font-semibold"
+                    title="Ubah Username & Kata Sandi Akun Anda"
+                  >
+                    <KeyRound className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>Ubah Sandi</span>
+                  </button>
+                )}
 
                 <button
                   id="navbar-btn-logout"

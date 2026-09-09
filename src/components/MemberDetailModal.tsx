@@ -14,7 +14,8 @@ import {
   User as UserIcon,
   Phone,
   Mail,
-  GraduationCap
+  GraduationCap,
+  KeyRound
 } from 'lucide-react';
 
 interface MemberDetailModalProps {
@@ -23,6 +24,7 @@ interface MemberDetailModalProps {
   user: User | null;
   transactions: PointTransaction[];
   onOpenRecordForUser?: (userId: string) => void;
+  onOpenChangeCredentials?: (user: User) => void;
 }
 
 export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
@@ -31,6 +33,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
   user,
   transactions,
   onOpenRecordForUser,
+  onOpenChangeCredentials,
 }) => {
   if (!isOpen || !user) return null;
 
@@ -184,6 +187,19 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
                     <span>Excel (.xlsx)</span>
                   </button>
                 </div>
+
+                {onOpenChangeCredentials && (
+                  <button
+                    id="btn-edit-credentials-for-member"
+                    onClick={() => {
+                      onOpenChangeCredentials(user);
+                    }}
+                    className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 rounded-lg border border-purple-200 transition-colors cursor-pointer"
+                  >
+                    <KeyRound className="w-3.5 h-3.5" />
+                    <span>Ubah Username / Sandi Anggota</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>
