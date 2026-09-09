@@ -18,6 +18,7 @@ import { NotificationModal } from './components/NotificationModal';
 import { AdminRecordModal } from './components/AdminRecordModal';
 import { MemberDetailModal } from './components/MemberDetailModal';
 import { RulesDirectoryModal } from './components/RulesDirectoryModal';
+import { AdminCreateUserModal } from './components/AdminCreateUserModal';
 import { LoginGate } from './components/LoginGate';
 import { ShieldCheck, Sparkles, UserCheck, AlertCircle } from 'lucide-react';
 
@@ -35,6 +36,7 @@ export default function App() {
   const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
   const [isRulesModalOpen, setIsRulesModalOpen] = useState(false);
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+  const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false);
   const [selectedMemberForDetail, setSelectedMemberForDetail] = useState<User | null>(null);
   const [preselectedUserForRecord, setPreselectedUserForRecord] = useState<string | undefined>(undefined);
 
@@ -117,7 +119,6 @@ export default function App() {
           <LoginGate
             users={users}
             onLoginSuccess={(user) => setCurrentUser(user)}
-            onOpenRegister={() => setIsAuthModalOpen(true)}
           />
         ) : currentUser.role === 'admin' ? (
           // ADMIN DASHBOARD
@@ -130,6 +131,7 @@ export default function App() {
               setIsRecordModalOpen(true);
             }}
             onSelectMember={member => setSelectedMemberForDetail(member)}
+            onOpenCreateUser={() => setIsCreateUserModalOpen(true)}
           />
         ) : (
           // REGULAR MEMBER DASHBOARD (Strictly only views their own data!)
@@ -233,6 +235,16 @@ export default function App() {
           users={users}
           adminUser={currentUser}
           preselectedUserId={preselectedUserForRecord}
+          onSuccess={() => syncData()}
+        />
+      )}
+
+      {currentUser?.role === 'admin' && (
+        <AdminCreateUserModal
+          isOpen={isCreateUserModalOpen}
+          onClose={() => setIsCreateUserModalOpen(false)}
+          users={users}
+          currentAdmin={currentUser}
           onSuccess={() => syncData()}
         />
       )}

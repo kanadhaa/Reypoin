@@ -18,7 +18,8 @@ import {
   BarChart3,
   TrendingUp,
   Layers,
-  GraduationCap
+  GraduationCap,
+  UserPlus
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -27,6 +28,7 @@ interface AdminDashboardProps {
   transactions: PointTransaction[];
   onOpenRecordModal: () => void;
   onSelectMember: (user: User) => void;
+  onOpenCreateUser?: () => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -35,6 +37,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   transactions,
   onOpenRecordModal,
   onSelectMember,
+  onOpenCreateUser,
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'history'>('overview');
   const [searchMember, setSearchMember] = useState('');
@@ -118,6 +121,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center gap-2.5">
+            {onOpenCreateUser && (
+              <button
+                id="btn-admin-create-user-trigger"
+                onClick={onOpenCreateUser}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 text-xs sm:text-sm font-extrabold text-white bg-purple-600 hover:bg-purple-700 rounded-xl transition-all shadow-md cursor-pointer"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>+ Buat Akun Pengurus</span>
+              </button>
+            )}
+
             <button
               id="btn-admin-record-modal-trigger"
               onClick={onOpenRecordModal}
@@ -431,6 +445,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <option value="WASPADA">Status Waspada</option>
                 <option value="SP">Terkendala SP (&lt;70)</option>
               </select>
+
+              {onOpenCreateUser && (
+                <button
+                  id="btn-admin-create-user-table-trigger"
+                  onClick={onOpenCreateUser}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-all shadow-2xs cursor-pointer"
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>+ Tambah Akun</span>
+                </button>
+              )}
             </div>
           </div>
 

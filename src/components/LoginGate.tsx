@@ -5,13 +5,11 @@ import { User } from '../types';
 interface LoginGateProps {
   users: User[];
   onLoginSuccess: (user: User) => void;
-  onOpenRegister: () => void;
 }
 
 export const LoginGate: React.FC<LoginGateProps> = ({
   users,
   onLoginSuccess,
-  onOpenRegister,
 }) => {
   const [usernameOrNis, setUsernameOrNis] = useState('');
   const [password, setPassword] = useState('');
@@ -155,21 +153,15 @@ export const LoginGate: React.FC<LoginGateProps> = ({
           </button>
         </form>
 
-        {/* Footer info & Register link */}
+        {/* Footer info */}
         <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
           <div className="flex items-center gap-1.5 text-slate-600 font-medium">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>Data terlindungi & terenkripsi sesi</span>
+            <span>Sesi Resmi OSIS-MPK SMAN 6 Bandung</span>
           </div>
-          <button
-            type="button"
-            id="login-gate-btn-register"
-            onClick={onOpenRegister}
-            className="font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 transition-colors cursor-pointer"
-          >
-            <UserPlus className="w-3.5 h-3.5" />
-            <span>Daftarkan Pengurus Baru</span>
-          </button>
+          <div className="text-[11px] text-slate-500 font-medium text-center sm:text-right">
+            *Pembuatan akun baru hanya dapat dilakukan oleh <span className="font-bold text-slate-700">Administrator</span>
+          </div>
         </div>
       </div>
     </div>

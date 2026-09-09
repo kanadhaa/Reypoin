@@ -85,6 +85,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (currentUser?.role !== 'admin') {
+      alert('Akses Ditolak: Pembuatan akun baru hanya dapat dilakukan oleh Administrator.');
+      return;
+    }
+
     if (!regName || !regNis || !regUsername) {
       alert('Nama, NIS, dan Username wajib diisi.');
       return;
@@ -115,8 +120,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     const updated = [...users, newUser];
     saveUsers(updated);
     saveUserFirebase(newUser);
-    setCurrentUser(newUser);
-    alert(`Akun baru berhasil dibuat! Selamat datang di OSIS-MPK 06 Bandung, ${regName}.`);
+    alert(`Akun pengurus baru (${regName} - ${regUsername}) berhasil didaftarkan oleh Administrator.`);
     onClose();
   };
 
@@ -172,31 +176,37 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
         )}
 
-        {/* Tabs: Login / Register */}
-        <div className="flex border-b border-slate-200 mt-4 text-xs font-semibold">
-          <button
-            id="tab-auth-login"
-            onClick={() => setMode('login')}
-            className={`pb-2.5 px-4 border-b-2 transition-colors ${
-              mode === 'login'
-                ? 'border-indigo-600 text-indigo-600 font-bold'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Masuk Akun
-          </button>
-          <button
-            id="tab-auth-register"
-            onClick={() => setMode('register')}
-            className={`pb-2.5 px-4 border-b-2 transition-colors ${
-              mode === 'register'
-                ? 'border-indigo-600 text-indigo-600 font-bold'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Daftar Pengurus Baru
-          </button>
-        </div>
+        {/* Tabs: Login / Register (Register is strictly for Administrator) */}
+        {currentUser?.role === 'admin' ? (
+          <div className="flex border-b border-slate-200 mt-4 text-xs font-semibold">
+            <button
+              id="tab-auth-login"
+              onClick={() => setMode('login')}
+              className={`pb-2.5 px-4 border-b-2 transition-colors ${
+                mode === 'login'
+                  ? 'border-indigo-600 text-indigo-600 font-bold'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              Ganti Akun Masuk
+            </button>
+            <button
+              id="tab-auth-register"
+              onClick={() => setMode('register')}
+              className={`pb-2.5 px-4 border-b-2 transition-colors ${
+                mode === 'register'
+                  ? 'border-indigo-600 text-indigo-600 font-bold'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              + Daftarkan Pengurus Baru (Admin)
+            </button>
+          </div>
+        ) : (
+          <div className="mt-3 text-xs text-slate-500 italic pb-1">
+            *Pendaftaran akun baru hanya memiliki otoritas pada Administrator.
+          </div>
+        )}
 
         {/* 1. Login Mode */}
         {mode === 'login' && (
